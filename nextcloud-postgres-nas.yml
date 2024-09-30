@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    container_name: nextcloud-db
+    volumes:
+      - /volume1/docker/postgres/nextcloud:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
+    expose:
+      - 5432
+  app:
+    image: nextcloud:latest
+    restart: always
+    container_name: nextcloud
+    ports:
+      - 8080:80
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_HOST=db
+    volumes:
+      - /volume1/docker/nextcloud/html:/var/www/html
+      - /volume1/docker/nextcloud/custom_apps:/var/www/html/custom_apps
+      - /volume1/docker/nextcloud/config:/var/www/html/config
+      - /volume1/docker/nextcloud/data:/var/www/html/data
+      - /volume1/docker/nextcloud/themes:/var/www/html/themes/
+
